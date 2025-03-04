@@ -190,6 +190,44 @@
         .media-info.visible {
             opacity: 1;
         }
+
+        /* Audio control styles */
+        #audio-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1002;
+            display: flex;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+
+        #audio-toggle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        #audio-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        #audio-status {
+            color: white;
+            font-size: 0.9em;
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
@@ -206,12 +244,13 @@
         
         <div class="sidebar-section">
             <div class="sidebar-title">Images</div>
-            <button class="media-btn" data-type="image" data-src="https://threejs.org/examples/textures/2294472375_24a3b8ef46_o.jpg     ">Mountain Landscape</button>
+            <button class="media-btn" data-type="image" data-src="https://threejs.org/examples/textures/2294472375_24a3b8ef46_o.jpg">Mountain Landscape</button>
             <button class="media-btn" data-type="image" data-src="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg">Ocean Sunset</button>
             <button class="media-btn" data-type="image" data-src="/api/placeholder/1920/1080">City Skyline</button>
             <button class="media-btn" data-type="image" data-src="/api/placeholder/1920/1080">Forest Path</button>
             <button class="media-btn" data-type="image" data-src="/api/placeholder/1920/1080">Desert Dunes</button>
             <button class="media-btn" data-type="image" data-src="/api/placeholder/1920/1080">Aurora Borealis</button>
+            <button class="media-btn" data-type="image" data-src="https://source.unsplash.com/random/1920x1080/?hotel,lobby">Taj Hotel Lobby</button>
         </div>
         
         <div class="sidebar-section">
@@ -232,13 +271,24 @@
         <button id="vr-toggle" class="control-btn">VR</button>
         <button id="next-btn" class="control-btn">→</button>
     </div>
+
+    <!-- Audio Controls -->
+    <div id="audio-controls">
+        <button id="audio-toggle">♫</button>
+        <span id="audio-status">Audio On</span>
+    </div>
     
     <!-- A-Frame scene for VR -->
     <div id="vr-container">
         <a-scene embedded vr-mode-ui="enabled: false">
             <a-assets>
-                <img id="welcome-bg" src="/api/placeholder/1920/1080" alt="Welcome Background">
-                <audio id="welcome-audio" src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAASAAAeMwAUFBQUFCIiIiIiIjAwMDAwMD4+Pj4+PkxMTExMTFpaWlpaWmhoaGhoaHZ2dnZ2doSEhISEhJKSkpKSkqCgoKCgoK6urq6urrKysrKysr6+vr6+vsbGxsbGxtTU1NTU1OLi4uLi4vDw8PDw8P///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAARGF0YQAAAA4AAAAA3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/zxAAAACIQAE1YTlRSAAAAEwAAADAwMABNWVRYVAAAABEAAABEQzQ4AAAAAAAAAAAA/+NOMSMACgBMYXZmNTguNzYuMTAwAEFCVUlEAAAAMAAAAABBQ09NAAAAAQAAADFNRUNTAAAADwAAADAwMDAwMDAwMDAwMDAAVElUMgAAAAEAAABBAEFQSUMAAAABAAAASXVQUklWAAAADwAAAEFydGlzdAAAAAAAAAAAAFBMQUdOAAAABAAAAFRlc3QAR0VOVAAAAAEAAAABQ09NTQAAABAAAAAKAFMAdQBuAGQAYQB5AC8/" crossorigin="anonymous" preload="auto"></audio>
+                <img id="welcome-bg" src="https://source.unsplash.com/random/1920x1080/?vr,gallery" alt="Welcome Background">
+                <audio id="welcome-audio" preload="auto">
+                    <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_bb630cc098.mp3?filename=welcome-to-the-jungle-111372.mp3" type="audio/mpeg">
+                </audio>
+                <audio id="background-music" loop preload="auto">
+                    <source src="https://cdn.pixabay.com/download/audio/2021/11/23/audio_cb15a7b1fe.mp3?filename=ambient-piano-amp-strings-10711.mp3" type="audio/mpeg">
+                </audio>
             </a-assets>
             
             <!-- Initial scene with a 360-degree image -->
@@ -265,18 +315,56 @@
             const vrToggle = document.getElementById('vr-toggle');
             const sky = document.getElementById('sky');
             const welcomeAudio = document.getElementById('welcome-audio');
+            const backgroundMusic = document.getElementById('background-music');
+            const audioToggle = document.getElementById('audio-toggle');
+            const audioStatus = document.getElementById('audio-status');
             
             let currentMediaIndex = -1;
             let allMedia = Array.from(mediaButtons);
+            let audioEnabled = true;
+            
+            // Play welcome audio when it's loaded
+            welcomeAudio.addEventListener('canplaythrough', function() {
+                console.log('Welcome audio loaded and ready to play');
+            });
             
             // Handle welcome screen
             enterButton.addEventListener('click', function() {
                 welcomeScreen.style.opacity = '0';
-                // Play welcome audio
-                welcomeAudio.play();
+                
+                // Play welcome audio with voice greeting
+                welcomeAudio.play()
+                    .then(() => {
+                        console.log('Welcome audio playing');
+                        // Start background music after welcome message
+                        welcomeAudio.addEventListener('ended', function() {
+                            if (audioEnabled) {
+                                backgroundMusic.play()
+                                    .then(() => console.log('Background music playing'))
+                                    .catch(e => console.error('Error playing background music:', e));
+                            }
+                        });
+                    })
+                    .catch(e => console.error('Error playing welcome audio:', e));
+                
                 setTimeout(() => {
                     welcomeScreen.style.display = 'none';
                 }, 1000);
+            });
+            
+            // Audio toggle
+            audioToggle.addEventListener('click', function() {
+                audioEnabled = !audioEnabled;
+                
+                if (audioEnabled) {
+                    backgroundMusic.play();
+                    audioStatus.textContent = 'Audio On';
+                    audioToggle.innerHTML = '♫';
+                } else {
+                    backgroundMusic.pause();
+                    audioStatus.textContent = 'Audio Off';
+                    audioToggle.innerHTML = '♪';
+                }
             });
             
             // Toggle sidebar
@@ -310,6 +398,14 @@
                 
                 // Update A-Frame sky with the new image
                 sky.setAttribute('src', mediaSrc);
+                
+                // For videos, handle video playback
+                if (mediaType === 'video') {
+                    const videoEl = document.querySelector(mediaSrc);
+                    if (videoEl) {
+                        videoEl.play();
+                    }
+                }
                 
                 // Show media info
                 currentMediaName.textContent = mediaName;
@@ -351,6 +447,9 @@
                     if (scene.is('vr-mode')) {
                         scene.exitVR();
                     }
+                } else if (e.key === 'M' || e.key === 'm') {
+                    // Toggle audio with M key
+                    audioToggle.click();
                 }
             });
             
@@ -367,6 +466,52 @@
             
             window.addEventListener('resize', checkMobile);
             checkMobile(); // Check on load
+            
+            // Add speech synthesis welcome
+            function speakWelcome() {
+                const welcomeMessage = "Welcome to the VR Gallery. Click on any image in the sidebar to view it in 360 degrees. Press VR button to enter virtual reality mode.";
+                
+                // Check if browser supports speech synthesis
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(welcomeMessage);
+                    utterance.volume = 0.8;
+                    utterance.rate = 0.9;
+                    utterance.pitch = 1.0;
+                    
+                    // Get available voices
+                    let voices = window.speechSynthesis.getVoices();
+                    
+                    // If voices not loaded yet, wait for them
+                    if (voices.length === 0) {
+                        window.speechSynthesis.addEventListener('voiceschanged', function() {
+                            voices = window.speechSynthesis.getVoices();
+                            setVoice();
+                        });
+                    } else {
+                        setVoice();
+                    }
+                    
+                    function setVoice() {
+                        // Try to find a good English voice
+                        const preferredVoice = voices.find(voice => 
+                            voice.name.includes('Google') && voice.name.includes('English') ||
+                            voice.name.includes('Microsoft') && voice.name.includes('English')
+                        );
+                        
+                        if (preferredVoice) {
+                            utterance.voice = preferredVoice;
+                        }
+                        
+                        // Speak the welcome message after the welcome screen disappears
+                        setTimeout(() => {
+                            window.speechSynthesis.speak(utterance);
+                        }, 1200);
+                    }
+                }
+            }
+            
+            // Attach to enter button
+            enterButton.addEventListener('click', speakWelcome);
         });
     </script>
 </body>
