@@ -13,13 +13,65 @@
             overflow: hidden;
         }
 
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
         #welcome-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #2c3e50, #2c0757);
+            background: linear-gradient(135deg, #2c3e50, #4a148c, #2c0757, #1a237e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -27,24 +79,46 @@
             color: white;
             z-index: 2000;
             transition: opacity 1s ease-in-out;
+            overflow: hidden;
+        }
+
+        #welcome-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.2) 100%);
+            pointer-events: none;
         }
 
         #welcome-title {
-            font-size: 3.5em;
+            font-size: 3.8em;
             margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1.2s ease, float 6s ease-in-out infinite;
+            background: linear-gradient(90deg, #ffffff, #e0e0e0, #ffffff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
         }
 
         #welcome-subtitle {
             font-size: 1.5em;
-            margin-bottom: 40px;
+            margin-bottom: 45px;
             text-align: center;
             max-width: 80%;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1.5s ease;
+            opacity: 0;
+            animation-fill-mode: forwards;
+            animation-delay: 0.5s;
         }
 
         #enter-button {
-            padding: 15px 40px;
+            padding: 15px 45px;
             font-size: 1.2em;
             background-color: rgba(255, 255, 255, 0.2);
             border: 2px solid white;
@@ -52,11 +126,73 @@
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s ease;
+            animation: fadeInUp 1.8s ease, pulse 2s infinite;
+            opacity: 0;
+            animation-fill-mode: forwards;
+            animation-delay: 1s;
+            position: relative;
+            overflow: hidden;
         }
 
         #enter-button:hover {
             background-color: rgba(255, 255, 255, 0.3);
             transform: scale(1.05);
+        }
+        
+        #enter-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% {
+                left: -50%;
+            }
+            100% {
+                left: 150%;
+            }
+        }
+        
+        /* Floating particles */
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            transition: background-color 3s ease;
+        }
+        
+        /* Add a special star-like shape to some particles */
+        .particle:nth-child(5n):after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 140%;
+            height: 140%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
         }
 
         #sidebar {
@@ -228,11 +364,33 @@
             font-size: 0.9em;
             margin-right: 5px;
         }
+
+        /* Panoraven iframe container */
+        #panoraven-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 990;
+            display: none;
+        }
+        
+        #panoraven-container.active {
+            display: block;
+        }
+        
+        #panoraven-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
     </style>
 </head>
 <body>
     <!-- Welcome Screen -->
     <div id="welcome-screen">
+        <div id="particles"></div>
         <h1 id="welcome-title">Welcome to VR Gallery</h1>
         <p id="welcome-subtitle">Experience images and videos in virtual reality. Explore, navigate, and immerse yourself in this interactive gallery.</p>
         <button id="enter-button">Enter Gallery</button>
@@ -244,21 +402,20 @@
         
         <div class="sidebar-section">
             <div class="sidebar-title">Images</div>
-            <button class="media-btn" data-type="image" data-src="https://threejs.org/examples/textures/2294472375_24a3b8ef46_o.jpg">Mountain Landscape</button>
-            <button class="media-btn" data-type="image" data-src="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg">Ocean Sunset</button>
-            <button class="media-btn" data-type="image" data-src="/api/placeholder/1920/1080">City Skyline</button>
-            <button class="media-btn" data-type="image" data-src="/api/placeholder/1920/1080">Forest Path</button>
-            <button class="media-btn" data-type="image" data-src="/api/placeholder/1920/1080">Desert Dunes</button>
-            <button class="media-btn" data-type="image" data-src="/api/placeholder/1920/1080">Aurora Borealis</button>
-            <button class="media-btn" data-type="image" data-src="https://source.unsplash.com/random/1920x1080/?hotel,lobby">Taj Hotel Lobby</button>
+            <button class="media-btn" data-type="panoraven" data-id="mtMMOamiIV">Enterance</button>
+            <button class="media-btn" data-type="panoraven" data-id="HEA9suu4v4">Class Room</button>
+            <button class="media-btn" data-type="panoraven" data-id="R3UqjM8U3s">ARVR Laboratory</button>
+            <button class="media-btn" data-type="panoraven" data-id="pSJVJ8Pcwk">Fountain</button>
+            <button class="media-btn" data-type="panoraven" data-id="KaIzu2Dx4i">Meeting Room</button>
+            <button class="media-btn" data-type="panoraven" data-id="yIHLjwZFiy">Ground</button>
         </div>
         
         <div class="sidebar-section">
             <div class="sidebar-title">Videos</div>
-            <button class="media-btn" data-type="video" data-src="/api/placeholder/1920/1080">Ocean Waves</button>
-            <button class="media-btn" data-type="video" data-src="/api/placeholder/1920/1080">Drone Flight</button>
-            <button class="media-btn" data-type="video" data-src="/api/placeholder/1920/1080">Waterfall</button>
-            <button class="media-btn" data-type="video" data-src="/api/placeholder/1920/1080">Storm Clouds</button>
+            <button class="media-btn" data-type="video" data-src="#video-ocean">Ocean Waves</button>
+            <button class="media-btn" data-type="video" data-src="#video-drone">Drone Flight</button>
+            <button class="media-btn" data-type="video" data-src="#video-waterfall">Waterfall</button>
+            <button class="media-btn" data-type="video" data-src="#video-storm">Storm Clouds</button>
         </div>
     </div>
     
@@ -278,6 +435,11 @@
         <span id="audio-status">Audio On</span>
     </div>
     
+    <!-- Panoraven Container -->
+    <div id="panoraven-container">
+        <iframe id="panoraven-iframe" allowfullscreen></iframe>
+    </div>
+    
     <!-- A-Frame scene for VR -->
     <div id="vr-container">
         <a-scene embedded vr-mode-ui="enabled: false">
@@ -289,6 +451,12 @@
                 <audio id="background-music" loop preload="auto">
                     <source src="https://cdn.pixabay.com/download/audio/2021/11/23/audio_cb15a7b1fe.mp3?filename=ambient-piano-amp-strings-10711.mp3" type="audio/mpeg">
                 </audio>
+                
+                <!-- Video assets -->
+                <video id="video-ocean" src="https://cdn.pixabay.com/vimeo/328940142/ocean-24216.mp4?width=640&hash=516f842331b3c3a0f185e3f3bd3eb0c25b2ebc69" loop preload="auto"></video>
+                <video id="video-drone" src="https://cdn.pixabay.com/vimeo/190499546/drone-4788.mp4?width=640&hash=a65d85be15a63232fc3cf13cb5ce5b2338c4efe1" loop preload="auto"></video>
+                <video id="video-waterfall" src="https://cdn.pixabay.com/vimeo/357820334/waterfall-30973.mp4?width=640&hash=79fc4d22e7391c40f8e0d7c61dc823fbd4cf5194" loop preload="auto"></video>
+                <video id="video-storm" src="https://cdn.pixabay.com/vimeo/529949678/storm-69910.mp4?width=640&hash=f4507cb8d8d16f8319ed361fa16ac1c01a0feafe" loop preload="auto"></video>
             </a-assets>
             
             <!-- Initial scene with a 360-degree image -->
@@ -298,6 +466,9 @@
             <a-entity id="rig" position="0 1.6 0">
                 <a-camera look-controls wasd-controls></a-camera>
             </a-entity>
+            
+            <!-- Video plane for video playback -->
+            <a-videosphere id="videosphere" visible="false"></a-videosphere>
         </a-scene>
     </div>
     
@@ -314,10 +485,14 @@
             const nextBtn = document.getElementById('next-btn');
             const vrToggle = document.getElementById('vr-toggle');
             const sky = document.getElementById('sky');
+            const videosphere = document.getElementById('videosphere');
             const welcomeAudio = document.getElementById('welcome-audio');
             const backgroundMusic = document.getElementById('background-music');
             const audioToggle = document.getElementById('audio-toggle');
             const audioStatus = document.getElementById('audio-status');
+            const panoravenContainer = document.getElementById('panoraven-container');
+            const panoravenIframe = document.getElementById('panoraven-iframe');
+            const vrContainer = document.getElementById('vr-container');
             
             let currentMediaIndex = -1;
             let allMedia = Array.from(mediaButtons);
@@ -386,6 +561,12 @@
                 
                 currentMediaIndex = index;
                 
+                // Reset all containers
+                panoravenContainer.classList.remove('active');
+                vrContainer.style.display = 'block';
+                sky.setAttribute('visible', 'true');
+                videosphere.setAttribute('visible', 'false');
+                
                 // Remove active class from all buttons
                 mediaButtons.forEach(btn => btn.classList.remove('active'));
                 
@@ -393,18 +574,32 @@
                 allMedia[index].classList.add('active');
                 
                 const mediaType = allMedia[index].getAttribute('data-type');
-                const mediaSrc = allMedia[index].getAttribute('data-src');
                 const mediaName = allMedia[index].textContent;
                 
-                // Update A-Frame sky with the new image
-                sky.setAttribute('src', mediaSrc);
-                
-                // For videos, handle video playback
-                if (mediaType === 'video') {
-                    const videoEl = document.querySelector(mediaSrc);
+                // Handle different media types
+                if (mediaType === 'panoraven') {
+                    // Handle Panoraven 360 image
+                    const panoravenId = allMedia[index].getAttribute('data-id');
+                    panoravenIframe.src = `https://panoraven.com/en/embed/${panoravenId}`;
+                    panoravenContainer.classList.add('active');
+                    vrContainer.style.display = 'none';
+                } else if (mediaType === 'video') {
+                    // Handle video content
+                    const videoSrc = allMedia[index].getAttribute('data-src');
+                    const videoEl = document.querySelector(videoSrc);
+                    
                     if (videoEl) {
+                        videosphere.setAttribute('src', videoSrc);
+                        videosphere.setAttribute('visible', 'true');
+                        sky.setAttribute('visible', 'false');
                         videoEl.play();
                     }
+                } else {
+                    // Handle regular images
+                    const mediaSrc = allMedia[index].getAttribute('data-src');
+                    sky.setAttribute('src', mediaSrc);
+                    sky.setAttribute('visible', 'true');
+                    videosphere.setAttribute('visible', 'false');
                 }
                 
                 // Show media info
@@ -428,6 +623,12 @@
             
             // VR mode toggle
             vrToggle.addEventListener('click', function() {
+                // If currently viewing a Panoraven image, switch back to A-Frame VR
+                if (panoravenContainer.classList.contains('active')) {
+                    alert('Please select an image from the gallery to use VR mode');
+                    return;
+                }
+                
                 const scene = document.querySelector('a-scene');
                 if (scene.is('vr-mode')) {
                     scene.exitVR();
@@ -512,6 +713,40 @@
             
             // Attach to enter button
             enterButton.addEventListener('click', speakWelcome);
+            
+            // Create animated particles
+            function createParticles() {
+                const particlesContainer = document.getElementById('particles');
+                const numberOfParticles = 50;
+                
+                for (let i = 0; i < numberOfParticles; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    
+                    // Random position, size and animation
+                    const size = Math.random() * 8 + 2;
+                    const posX = Math.random() * 100;
+                    const posY = Math.random() * 100;
+                    const duration = Math.random() * 20 + 10;
+                    const delay = Math.random() * 5;
+                    
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${posX}%`;
+                    particle.style.top = `${posY}%`;
+                    particle.style.opacity = Math.random() * 0.5 + 0.1;
+                    
+                    // Create random floating animation
+                    particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+                    // Random transform origin for varied movement
+                    particle.style.transformOrigin = `${Math.random() * 100}% ${Math.random() * 100}%`;
+                    
+                    particlesContainer.appendChild(particle);
+                }
+            }
+            
+            // Initialize particles
+            createParticles();
         });
     </script>
 </body>
